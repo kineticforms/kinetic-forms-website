@@ -12,7 +12,7 @@ export default function Navbar() {
         </span>
       </div>
       <a
-        href="mailto:hello@kineticforms.com"
+        href="mailto:hello@kineticforms.ai"
         className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-black text-white text-xs font-semibold uppercase tracking-wider rounded-full hover:-translate-y-0.5 transition-all duration-300"
       >
         Get in Touch <ArrowRight className="w-3.5 h-3.5" />

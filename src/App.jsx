@@ -50,7 +50,7 @@ export default function App() {
           </div>
           <div className="pt-6">
             <a
-              href="mailto:hello@kineticforms.com"
+              href="mailto:hello@kineticforms.ai"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-black text-white text-sm font-semibold uppercase tracking-wider rounded-full hover:-translate-y-0.5 transition-all duration-300"
             >
               Start a Project <ArrowRight className="w-4 h-4" />
@@ -112,7 +112,7 @@ export default function App() {
               </div>
             </div>
             <a
-              href="mailto:hello@kineticforms.com"
+              href="mailto:hello@kineticforms.ai"
               className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-black hover:gap-3 transition-all"
             >
               Let's Talk <ArrowRight className="w-4 h-4" />
