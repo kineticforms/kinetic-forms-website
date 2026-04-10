@@ -51,7 +51,7 @@ export default function TypewriterHeading() {
     );
 
   return (
-    <h1 className="text-6xl md:text-8xl font-medium tracking-tighter leading-none h-[120px] md:h-[192px]">
+    <h1 className="text-5xl md:text-8xl font-medium tracking-tighter leading-none h-[100px] md:h-[192px]">
       {displayText}
       <span className="inline-block font-light animate-pulse text-zinc-300 -ml-1 md:-ml-2">
         |
