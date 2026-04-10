@@ -1,0 +1,57 @@
+---
+import Base from "../layouts/Base.astro";
+import NewsletterForm from "../components/NewsletterForm";
+// Icons inlined as SVG (lucide-react can't SSR in Astro templates)
+---
+
+<Base title="About — Kinetic Forms" description="Kinetic Forms is a solo builder's platform for AI-native development. Tools, research, and products shipped at impossible speed.">
+  <div class="pt-32 pb-24 px-6 max-w-prose mx-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">About</p>
+    <h1 class="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-8">
+      Building at the speed of AI.
+    </h1>
+
+    <div class="space-y-6 text-lg text-zinc-500 leading-relaxed">
+      <p>
+        Kinetic Forms is built by Chris Piatt from Puerto Rico. One person, AI
+        leverage, and the belief that a single builder can now ship what used to
+        take a team.
+      </p>
+
+      <p>
+        I build tools for myself, then share the ones that work. I research how
+        AI agents actually function in production, then publish what I find. Every
+        tool and every piece of research on this site exists because I needed it
+        first.
+      </p>
+
+      <p>
+        The name comes from the idea that the best digital experiences feel alive.
+        They have momentum. They move with you. Kinetic, not static.
+      </p>
+
+      <p>
+        If you're building something and want to talk, I'm always up for it.
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <a
+        href="mailto:hello@kineticforms.ai"
+        class="inline-flex items-center gap-2 px-8 min-h-[44px] bg-black dark:bg-white text-white dark:text-black text-sm font-semibold uppercase tracking-wider rounded-full hover:-translate-y-0.5 transition-all duration-150 focus-visible:ring-2 ring-zinc-900 dark:ring-white ring-offset-2"
+      >
+        Get in touch <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <hr class="border-zinc-200 dark:border-zinc-800 my-16" />
+
+    <div class="bg-zinc-900 dark:bg-zinc-800 text-white rounded-2xl p-8 md:p-12">
+      <h3 class="text-xl font-medium mb-2">Stay in the loop.</h3>
+      <p class="text-zinc-400 text-sm mb-6">
+        Weekly breakdown of what I built and how. No fluff.
+      </p>
+      <NewsletterForm client:only="react" variant="dark" />
+    </div>
+  </div>
+</Base>

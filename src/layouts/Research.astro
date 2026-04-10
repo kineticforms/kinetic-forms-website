@@ -1,0 +1,92 @@
+---
+import Base from "./Base.astro";
+import NewsletterForm from "../components/NewsletterForm";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"research">;
+}
+
+const { entry } = Astro.props;
+const { title, description, date, tags } = entry.data;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<Base title={`${title} — Kinetic Forms`} description={description}>
+  <article class="pt-32 pb-24 px-6">
+    <div class="max-w-prose mx-auto">
+      <!-- Article header -->
+      <div class="mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">
+          Research
+        </p>
+        <h1 class="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
+          {title}
+        </h1>
+        <div class="flex items-center gap-3 text-sm text-zinc-500">
+          <time datetime={date.toISOString()}>{formattedDate}</time>
+          {tags.length > 0 && (
+            <>
+              <span>·</span>
+              <div class="flex gap-2">
+                {tags.map((tag) => (
+                  <span class="text-zinc-400">#{tag}</span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <hr class="border-zinc-200 dark:border-zinc-800 mb-12" />
+
+      <!-- Article body -->
+      <div class="prose prose-zinc dark:prose-invert prose-lg max-w-none prose-headings:font-medium prose-headings:tracking-tight prose-a:text-zinc-900 dark:prose-a:text-white prose-a:underline-offset-4">
+        <slot />
+      </div>
+
+      <!-- Separator -->
+      <hr class="border-zinc-200 dark:border-zinc-800 my-12" />
+
+      <!-- End-of-article newsletter CTA -->
+      <div class="bg-zinc-900 dark:bg-zinc-800 text-white rounded-2xl p-8 md:p-12">
+        <h3 class="text-xl font-medium mb-2">Get the next deep-dive.</h3>
+        <p class="text-zinc-400 text-sm mb-6">
+          No fluff, just what I built this week and how.
+        </p>
+        <NewsletterForm client:only="react" variant="dark" />
+      </div>
+
+      <!-- Copy link -->
+      <div class="mt-8 flex justify-end">
+        <button
+          id="copy-link-btn"
+          class="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-2 focus-visible:ring-2 ring-zinc-900 dark:ring-white rounded-sm px-2 py-1"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          <span id="copy-link-text">Copy link</span>
+        </button>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<script is:inline>
+  const btn = document.getElementById("copy-link-btn");
+  const text = document.getElementById("copy-link-text");
+  if (btn && text) {
+    btn.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(window.location.href);
+      text.textContent = "Copied!";
+      setTimeout(() => { text.textContent = "Copy link"; }, 2000);
+    });
+  }
+</script>

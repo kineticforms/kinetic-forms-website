@@ -8,12 +8,22 @@ const TAGLINES = [
 ];
 
 export default function TypewriterHeading() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(TAGLINES[0]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(150);
+  const [typingSpeed, setTypingSpeed] = useState(2500);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    // Start deleting after initial pause
+    const initial = setTimeout(() => setIsDeleting(true), 2500);
+    return () => clearTimeout(initial);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const timer = setTimeout(() => {
       const i = loopNum % TAGLINES.length;
       const fullText = TAGLINES[i];
@@ -36,7 +46,7 @@ export default function TypewriterHeading() {
       }
     }, typingSpeed);
     return () => clearTimeout(timer);
-  }, [text, isDeleting, loopNum, typingSpeed]);
+  }, [text, isDeleting, loopNum, typingSpeed, mounted]);
 
   const spaceIndex = text.indexOf(" ");
   const displayText =
@@ -51,9 +61,9 @@ export default function TypewriterHeading() {
     );
 
   return (
-    <h1 className="text-6xl md:text-8xl font-medium tracking-tighter leading-none h-[120px] md:h-[192px]">
+    <h1 className="text-5xl sm:text-7xl md:text-9xl font-medium tracking-tighter leading-[0.9] min-h-[120px] sm:min-h-[160px] md:min-h-[220px]">
       {displayText}
-      <span className="inline-block font-light animate-pulse text-zinc-300 -ml-1 md:-ml-2">
+      <span className="inline-block font-light animate-pulse text-zinc-300 dark:text-zinc-600 -ml-1 md:-ml-2">
         |
       </span>
     </h1>

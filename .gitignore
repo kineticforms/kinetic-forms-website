@@ -1,6 +1,7 @@
 node_modules
 dist
 .DS_Store
+.astro
 
 # wrangler files
 .wrangler
@@ -8,3 +9,5 @@ dist
 !.dev.vars.example
 .env*
 !.env.example
+.env
+.gstack/

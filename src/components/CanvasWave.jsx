@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
 
+const DESKTOP_COLS = 80;
+const DESKTOP_ROWS = 40;
+const MOBILE_COLS = 40;
+const MOBILE_ROWS = 20;
 const SPACING = 45;
-const ROWS = 40;
-const COLS = 80;
 const FOV = 400;
 const CAMERA_Z = 250;
 const CAMERA_Y = -150;
@@ -13,12 +15,16 @@ export default function CanvasWave() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     let animationFrameId;
 
+    const isMobile = window.matchMedia("(max-width: 640px)").matches;
+    const COLS = isMobile ? MOBILE_COLS : DESKTOP_COLS;
+    const ROWS = isMobile ? MOBILE_ROWS : DESKTOP_ROWS;
+
     let width = canvas.offsetWidth;
     let height = canvas.offsetHeight;
-
     canvas.width = width * window.devicePixelRatio;
     canvas.height = height * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -39,10 +45,19 @@ export default function CanvasWave() {
     let mouseY = 0;
     let targetMouseX = 0;
     let targetMouseY = 0;
+    let opacity = 0;
 
     const handleMouseMove = (e) => {
       targetMouseX = (e.clientX - window.innerWidth / 2) * 2.5;
       targetMouseY = (e.clientY - window.innerHeight / 2) * 2.5;
+    };
+
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0];
+      if (touch) {
+        targetMouseX = (touch.clientX - window.innerWidth / 2) * 2.5;
+        targetMouseY = (touch.clientY - window.innerHeight / 2) * 2.5;
+      }
     };
 
     const handleResize = () => {
@@ -54,11 +69,15 @@ export default function CanvasWave() {
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
     window.addEventListener("resize", handleResize);
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
       time += 0.015;
+
+      // Fade in over 500ms (~30 frames)
+      if (opacity < 1) opacity = Math.min(1, opacity + 0.033);
 
       mouseX += (targetMouseX - mouseX) * 0.03;
       mouseY += (targetMouseY - mouseY) * 0.03;
@@ -88,7 +107,7 @@ export default function CanvasWave() {
           const y2d = height / 2 + dy * scale;
 
           if (x2d > -10 && x2d < width + 10 && y2d > -10 && y2d < height + 10) {
-            const alpha = Math.max(0, Math.min(1, scale * 1.2 - 0.1));
+            const alpha = Math.max(0, Math.min(1, scale * 1.2 - 0.1)) * opacity;
             ctx.beginPath();
             ctx.arc(x2d, y2d, scale * 2, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(113, 113, 122, ${alpha * 0.35})`;
@@ -103,6 +122,7 @@ export default function CanvasWave() {
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
@@ -111,6 +131,7 @@ export default function CanvasWave() {
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       className="absolute inset-0 w-full h-full pointer-events-none"
     />
   );

@@ -1,0 +1,16 @@
+---
+import Base from "./Base.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Base title={`${title} — Kinetic Forms`} description={description}>
+  <div class="pt-16 min-h-screen">
+    <slot />
+  </div>
+</Base>

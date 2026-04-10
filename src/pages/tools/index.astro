@@ -1,0 +1,28 @@
+---
+import Base from "../../layouts/Base.astro";
+import NewsletterForm from "../../components/NewsletterForm";
+---
+
+<Base title="Tools — Kinetic Forms" description="Free AI-powered tools for builders. Generate brandbooks, research reports, and more.">
+  <div class="pt-32 pb-24 px-6 max-w-6xl mx-auto">
+    <div class="mb-12">
+      <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">Tools</p>
+      <h1 class="text-4xl md:text-5xl font-medium tracking-tight">Free tools for builders</h1>
+      <p class="text-lg text-zinc-500 mt-4 max-w-2xl leading-relaxed">
+        Everything I build for myself, packaged for you. No login required.
+      </p>
+    </div>
+
+    <!-- Empty state -->
+    <div class="text-center py-24 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl">
+      <h2 class="text-xl font-medium mb-3">Tools are on the way.</h2>
+      <p class="text-zinc-500 mb-2">The AI Brandbook Generator ships first.</p>
+      <p class="text-zinc-500 text-sm mb-8">
+        Subscribe to get notified when it launches.
+      </p>
+      <div class="max-w-md mx-auto">
+        <NewsletterForm client:only="react" />
+      </div>
+    </div>
+  </div>
+</Base>
