@@ -1,6 +1,6 @@
 # Kinetic Forms — Website
 
-The marketing website for [Kinetic Forms](https://kineticforms.com), an AI-native software consultancy built for velocity.
+The marketing website for [Kinetic Forms](https://kineticforms.com), an AI-native product studio built for velocity.
 
 Built with React, Vite, and Tailwind CSS.
 

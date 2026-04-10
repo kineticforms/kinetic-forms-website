@@ -1,27 +1,25 @@
-import { Zap, UserCircle, Crosshair, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import CanvasWave from "./components/CanvasWave";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import TypewriterHeading from "./components/TypewriterHeading";
+import PillarCards from "./components/PillarCards";
 
 const PILLARS = [
   {
     title: "Velocity",
     description:
       "The world is now moving faster than anyone ever thought possible. You need to move with it. We can help.",
-    icon: Zap,
   },
   {
     title: "Personality",
     description:
       "Every experience should feel personal and deeply human. Delight is not an afterthought. It's core to everything we build.",
-    icon: UserCircle,
   },
   {
     title: "Precision",
     description:
       "Always sweat the small stuff. Our edge is our attention to detail. We're not done until every pixel is perfect, every transition is seamless, and every interaction is perfectly resolved.",
-    icon: Crosshair,
   },
 ];
 
@@ -29,7 +27,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 font-sans selection:bg-zinc-200">
       {/* Particle background */}
-      <div className="fixed top-0 left-0 w-full h-[80vh] pointer-events-none overflow-hidden z-0">
+      <div className="fixed top-[10vh] md:top-0 left-0 w-full h-[80vh] pointer-events-none overflow-hidden z-0">
         <CanvasWave />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-50/20 to-zinc-50 pointer-events-none" />
       </div>
@@ -37,21 +35,31 @@ export default function App() {
       <Navbar />
 
       <main className="relative z-10 pt-28 md:pt-32 pb-16 md:pb-24 px-5 md:px-6 max-w-6xl mx-auto space-y-16 md:space-y-24">
-        {/* Hero */}
-        <div className="space-y-6">
-          <TypewriterHeading />
-          <div className="max-w-2xl space-y-4">
-            <p className="text-zinc-500 text-base md:text-lg leading-relaxed">
-              Kinetic Forms is an AI-native product studio built for velocity. We blend relentless momentum with considered, human-centric details — creating digital experiences that feel alive, intuitive, and unapologetically forward-leaning.
-            </p>
+        {/* Hero — fills mobile viewport, spaced across the screen */}
+        <div className="min-h-[calc(100svh-7rem)] md:min-h-0 flex flex-col justify-between md:justify-center md:gap-0">
+          <div className="flex-1 flex flex-col justify-center gap-10 md:gap-0 md:flex-none md:space-y-6 -mt-12 md:mt-0">
+            <TypewriterHeading />
+            <div className="max-w-2xl">
+              <p className="text-zinc-500 text-base md:text-lg leading-relaxed">
+                Kinetic Forms is an AI-native product studio built for velocity. We blend relentless momentum with considered, human-centric details — creating digital experiences that feel alive, intuitive, and unapologetically forward-leaning.
+              </p>
+            </div>
+            <div className="md:pt-6">
+              <a
+                href="mailto:hello@kineticforms.ai"
+                className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-3.5 bg-black text-white text-xs md:text-sm font-semibold uppercase tracking-wider rounded-full hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Get in Touch <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
+              </a>
+            </div>
           </div>
-          <div className="pt-4 md:pt-6">
-            <a
-              href="mailto:hello@kineticforms.ai"
-              className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-3.5 bg-black text-white text-xs md:text-sm font-semibold uppercase tracking-wider rounded-full hover:-translate-y-0.5 transition-all duration-300"
-            >
-              Get in Touch <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            </a>
+
+          {/* Scroll hint — mobile only */}
+          <div className="flex md:hidden flex-col items-center pb-4">
+            <svg width="20" height="32" viewBox="0 0 20 32" fill="none" className="text-zinc-400 animate-[pulse_2.5s_ease-in-out_infinite]">
+              <path d="M10 6 L10 24" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+              <path d="M5 19 L10 25 L15 19" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
         </div>
 
@@ -60,22 +68,7 @@ export default function App() {
           <h2 className="text-xl md:text-2xl font-medium tracking-tight border-b border-zinc-200 pb-3 md:pb-4">
             What We Bring
           </h2>
-          <div className="grid md:grid-cols-3 gap-4 md:gap-8">
-            {PILLARS.map((pillar, i) => (
-              <div
-                key={i}
-                className="p-6 md:p-8 border border-zinc-200 rounded-2xl bg-white hover:border-zinc-400 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-zinc-50 rounded-full flex items-center justify-center mb-4 md:mb-6">
-                  <pillar.icon className="w-4 h-4 md:w-5 md:h-5 text-zinc-900" />
-                </div>
-                <h3 className="font-bold text-base md:text-lg mb-2">{pillar.title}</h3>
-                <p className="text-sm text-zinc-500 leading-relaxed">
-                  {pillar.description}
-                </p>
-              </div>
-            ))}
-          </div>
+          <PillarCards pillars={PILLARS} />
         </div>
 
         {/* Hero Cards */}
@@ -88,15 +81,15 @@ export default function App() {
               <div className="absolute w-0.5 h-1/2 bg-white -translate-x-[20%]" />
             </div>
           </div>
-          <div className="aspect-auto md:aspect-square bg-white border border-zinc-200 rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-between hover:border-zinc-300 transition-colors">
-            <div className="space-y-4 md:space-y-6">
+          <div className="aspect-auto md:aspect-square bg-white border border-zinc-200 rounded-2xl md:rounded-3xl p-7 md:p-12 flex flex-col justify-between hover:border-zinc-300 transition-colors">
+            <div className="space-y-5 md:space-y-6">
               <div className="h-1 w-12 bg-black" />
               <h4 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight">
                 Products
                 <br />
                 In Motion
               </h4>
-              <div className="text-zinc-500 text-sm md:text-base max-w-sm space-y-3">
+              <div className="text-zinc-500 text-base md:text-base max-w-sm space-y-3">
                 <p>
                   We're building software products across AI productivity,
                   creative tools, and niche markets that are ripe for
@@ -110,7 +103,7 @@ export default function App() {
             </div>
             <a
               href="mailto:hello@kineticforms.ai"
-              className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-black hover:gap-3 transition-all mt-6 md:mt-0"
+              className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-black hover:gap-3 transition-all mt-8 md:mt-0"
             >
               Say Hello <ArrowRight className="w-4 h-4" />
             </a>

@@ -24,16 +24,17 @@ function LinkedInIcon({ className }) {
 
 export default function Footer() {
   return (
-    <footer className="py-6 md:py-8 border-t border-zinc-200 px-5 md:px-6 bg-white relative z-10">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 max-w-6xl mx-auto">
+    <footer className="py-5 md:py-8 border-t border-zinc-200 px-5 md:px-6 bg-white relative z-10">
+      <div className="flex flex-row items-center justify-between max-w-6xl mx-auto">
+        {/* Logo mark only on mobile, full lockup on desktop */}
         <div className="flex items-center gap-2">
           <div className="w-5 h-5 bg-black rounded-[2px] flex items-center justify-center">
             <span className="text-white font-bold text-[8px]">K.</span>
           </div>
-          <span className="text-sm font-semibold">Kinetic Forms</span>
+          <span className="hidden md:inline text-sm font-semibold">Kinetic Forms</span>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 md:gap-6">
+          <div className="flex items-center gap-3.5 md:gap-4">
             <a
               href="https://x.com/kineticforms"
               target="_blank"
@@ -62,7 +63,7 @@ export default function Footer() {
               <LinkedInIcon className="w-4 h-4" />
             </a>
           </div>
-          <p className="text-zinc-400 text-xs tracking-wide uppercase font-medium">
+          <p className="text-zinc-400 text-[10px] md:text-xs tracking-wide uppercase font-medium">
             &copy; {new Date().getFullYear()} Kinetic Forms
           </p>
         </div>

@@ -45,6 +45,14 @@ export default function CanvasWave() {
       targetMouseY = (e.clientY - window.innerHeight / 2) * 2.5;
     };
 
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0];
+      if (touch) {
+        targetMouseX = (touch.clientX - window.innerWidth / 2) * 2.5;
+        targetMouseY = (touch.clientY - window.innerHeight / 2) * 2.5;
+      }
+    };
+
     const handleResize = () => {
       width = canvas.offsetWidth;
       height = canvas.offsetHeight;
@@ -54,6 +62,7 @@ export default function CanvasWave() {
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
     window.addEventListener("resize", handleResize);
 
     const render = () => {
@@ -103,6 +112,7 @@ export default function CanvasWave() {
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
