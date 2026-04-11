@@ -4,37 +4,35 @@ import { useState, useEffect, useRef, useCallback } from "react";
 // scrolls into the center of the viewport, hold it, then release.
 function useCardActive(holdMs = 1800) {
   const [active, setActive] = useState(false);
-  const [hasHover, setHasHover] = useState(true);
   const ref = useRef(null);
   const firedRef = useRef(false);
+  const hasHoverRef = useRef(false);
 
   useEffect(() => {
-    setHasHover(window.matchMedia("(hover: hover)").matches);
-  }, []);
+    hasHoverRef.current = window.matchMedia("(hover: hover)").matches;
 
-  useEffect(() => {
-    if (hasHover || !ref.current) return;
+    // Touch devices: fire on scroll into view
+    if (!hasHoverRef.current && ref.current) {
+      const el = ref.current;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !firedRef.current) {
+            firedRef.current = true;
+            setActive(true);
+            setTimeout(() => setActive(false), holdMs);
+          } else if (!entry.isIntersecting) {
+            firedRef.current = false;
+          }
+        },
+        { threshold: 0.5 }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
+    }
+  }, [holdMs]);
 
-    const el = ref.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !firedRef.current) {
-          firedRef.current = true;
-          setActive(true);
-          setTimeout(() => setActive(false), holdMs);
-          // Allow re-trigger after leaving viewport
-          setTimeout(() => { firedRef.current = false; }, holdMs + 500);
-        }
-      },
-      { threshold: 0.6 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasHover, holdMs]);
-
-  const onMouseEnter = useCallback(() => hasHover && setActive(true), [hasHover]);
-  const onMouseLeave = useCallback(() => hasHover && setActive(false), [hasHover]);
+  const onMouseEnter = useCallback(() => { if (hasHoverRef.current) setActive(true); }, []);
+  const onMouseLeave = useCallback(() => { if (hasHoverRef.current) setActive(false); }, []);
 
   return { ref, active, onMouseEnter, onMouseLeave };
 }
@@ -54,91 +52,91 @@ function VelocityCard({ pillar }) {
   return (
     <div
       ref={ref}
-      className="relative p-7 md:p-8 border border-zinc-200 rounded-2xl bg-white overflow-hidden transition-all duration-150 min-h-[280px] md:min-h-0"
+      className="relative p-7 md:p-8 border rounded-2xl overflow-hidden min-h-[280px] md:min-h-0"
       style={{
-        borderColor: hovered ? "#a1a1aa" : undefined,
-        boxShadow: hovered ? "0 10px 40px rgba(0,0,0,0.08)" : "none",
+        borderColor: hovered ? "#18181b" : "#e4e4e7",
+        backgroundColor: hovered ? "#fafafa" : "white",
+        boxShadow: hovered ? "0 10px 50px rgba(0,0,0,0.15)" : "none",
+        transition: "border-color 80ms, box-shadow 100ms, background-color 80ms",
       }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {/* Light streaks that fire across the card on hover */}
+      {/* Speed streaks — thick, visible, aggressive */}
       {hovered && (
         <div key={streakKey} className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
             <div
               key={i}
-              className="absolute h-[1px]"
+              className="absolute"
               style={{
-                top: `${15 + i * 18}%`,
+                top: `${5 + i * 10}%`,
                 left: 0,
-                width: "40%",
-                background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.06) 40%, rgba(0,0,0,0.12), rgba(0,0,0,0.06) 60%, transparent)",
-                animation: `velocity-streak ${300 + i * 60}ms ${i * 40}ms ease-out forwards`,
+                height: i % 3 === 0 ? 3 : i % 3 === 1 ? 2 : 1,
+                width: `${35 + (i % 4) * 12}%`,
+                background: `linear-gradient(90deg, transparent 5%, rgba(0,0,0,${0.06 + (i % 3) * 0.04}) 25%, rgba(0,0,0,${0.12 + (i % 3) * 0.06}) 50%, rgba(0,0,0,${0.06 + (i % 3) * 0.04}) 75%, transparent 95%)`,
+                animation: `velocity-streak ${150 + i * 30}ms ${i * 15}ms ease-out forwards`,
               }}
             />
           ))}
         </div>
       )}
 
-      <div className="relative z-10">
+      <div
+        className="relative z-10"
+        style={{
+          transform: hovered ? "translateX(6px)" : "translateX(0)",
+          transition: "transform 100ms cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
         {/* Icon: double chevron that snaps forward */}
         <div
-          className="w-10 h-10 md:w-12 md:h-12 bg-zinc-50 rounded-full flex items-center justify-center mb-4 md:mb-6 text-zinc-900 transition-all duration-150"
+          className="w-10 h-10 md:w-12 md:h-12 bg-zinc-50 rounded-full flex items-center justify-center mb-4 md:mb-6 text-zinc-900"
           style={{
-            transform: hovered ? "translateX(6px)" : "translateX(0)",
+            transform: hovered ? "translateX(8px)" : "translateX(0)",
+            transition: "transform 120ms cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6">
             <path
-              d="M5 7l5 5-5 5"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-              className="transition-all duration-150"
+              d="M4 7l5 5-5 5"
+              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
               style={{
-                opacity: hovered ? 0.35 : 0.9,
-                transform: hovered ? "translateX(-2px)" : "translateX(0)",
+                opacity: hovered ? 0.2 : 0.7,
+                transform: hovered ? "translateX(-3px)" : "translateX(0)",
+                transition: "all 120ms",
               }}
             />
             <path
-              d="M11 7l5 5-5 5"
-              stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-              className="transition-all duration-150"
+              d="M9 7l5 5-5 5"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
               style={{
-                transform: hovered ? "translateX(3px)" : "translateX(0)",
+                opacity: hovered ? 0.5 : 0.85,
+                transition: "all 100ms",
+              }}
+            />
+            <path
+              d="M14 7l5 5-5 5"
+              stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+              style={{
+                transform: hovered ? "translateX(4px)" : "translateX(0)",
+                transition: "transform 100ms cubic-bezier(0.16, 1, 0.3, 1)",
               }}
             />
           </svg>
         </div>
 
-        {/* Title and text blur-snap on hover */}
         <h3
-          className="font-bold text-lg md:text-lg mb-3 md:mb-2 transition-all duration-150"
-          style={{
-            transform: hovered ? "translateX(2px)" : "translateX(0)",
-          }}
+          className="font-bold text-lg md:text-lg mb-3 md:mb-2"
         >
           {pillar.title}
         </h3>
         <p
-          className="text-base md:text-sm text-zinc-500 leading-relaxed transition-all duration-200"
-          style={{
-            transform: hovered ? "translateX(1px)" : "translateX(0)",
-          }}
+          className="text-base md:text-sm text-zinc-500 leading-relaxed"
         >
           {pillar.description}
         </p>
       </div>
-
-      {/* Afterimage: the whole card content "ghosts" to the right on hover */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-all duration-100"
-        style={{
-          opacity: hovered ? 0.025 : 0,
-          transform: "translateX(8px)",
-          filter: "blur(4px)",
-          background: "inherit",
-        }}
-      />
     </div>
   );
 }
