@@ -41,7 +41,7 @@ export default function App() {
             <TypewriterHeading />
             <div className="max-w-2xl">
               <p className="text-zinc-500 text-base md:text-lg leading-relaxed">
-                Kinetic Forms is an AI-native product studio built for velocity. We blend relentless momentum with considered, human-centric details — creating digital experiences that feel alive, intuitive, and unapologetically forward-leaning.
+                Kinetic Forms is an AI-native product studio built for velocity. We blend relentless momentum with considered, human-centric details — creating digital experiences that feel alive, intuitive, and forward-leaning by design.
               </p>
             </div>
             <div className="md:pt-6">
