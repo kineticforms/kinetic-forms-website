@@ -1,0 +1,5 @@
+# Cloudflare manages bot rules via Scrape Shield.
+# This file exists to prevent the SPA fallback from serving HTML at /robots.txt.
+
+User-agent: *
+Allow: /
